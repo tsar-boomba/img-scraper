@@ -1,0 +1,17 @@
+{
+	"name": "img-scraper",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "ts-node index.ts"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^0.24.0",
+		"playwright": "^1.16.3",
+		"ts-node": "^10.4.0"
+	}
+}
