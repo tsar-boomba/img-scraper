@@ -3,7 +3,8 @@ const Fs = require('fs');
 const Path = require('path');
 import Axios from 'axios';
 
-/* NAME OF OUTPUT DIRECTORY HERE */
+/* URL AND NAME OF OUTPUT DIRECTORY HERE */
+const targetUrl = 'https://yetirobotics.org/';
 const outDir = 'output';
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
@@ -51,6 +52,4 @@ const getImages = async (url: string) => {
 	await browser.close();
 };
 
-getImages('https://yetirobotics.org/'); // change the argument to the url you wnat to use
-
-export {};
+getImages(targetUrl);
