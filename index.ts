@@ -3,13 +3,14 @@ import fs from 'fs';
 import Path from 'path';
 import axios from 'axios';
 
-const fileExtensions = ['jpg', 'jpeg', 'png', 'svg', 'gif', 'webp'];
+const fileExtensions = ['webp', 'jpg', 'jpeg', 'png', 'svg', 'gif'];
 
 const getFileExtension = (url: string) => {
 	let ext = '';
 	fileExtensions.forEach((extension) => {
 		if (url.toLowerCase().includes(extension)) {
 			ext = extension;
+			return;
 		}
 	});
 	return ext;
@@ -37,4 +38,4 @@ const getImages = async (url: string) => {
 	await browser.close();
 };
 
-getImages('You url here'); // change the argument to the url you wnat to use
+getImages('your url here'); // change the argument to the url you wnat to use
