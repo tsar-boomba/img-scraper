@@ -3,7 +3,7 @@ import fs from 'fs';
 import Path from 'path';
 import axios from 'axios';
 
-const fileExtensions = ['jpg', 'jpeg', 'png', 'svg', 'gif'];
+const fileExtensions = ['jpg', 'jpeg', 'png', 'svg', 'gif', 'webp'];
 
 const getFileExtension = (url: string) => {
 	let ext = '';
