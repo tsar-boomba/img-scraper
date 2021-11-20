@@ -37,4 +37,4 @@ const getImages = async (url: string) => {
 	await browser.close();
 };
 
-getImages('https://allenuniversity.edu/');
+getImages('You url here'); // change the argument to the url you wnat to use
