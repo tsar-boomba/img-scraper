@@ -1,41 +1,56 @@
-import playwright from 'playwright';
-import fs from 'fs';
-import Path from 'path';
-import axios from 'axios';
+const playwright = require('playwright');
+const Fs = require('fs');
+const Path = require('path');
+import Axios from 'axios';
 
-const fileExtensions = ['webp', 'jpg', 'jpeg', 'png', 'svg', 'gif'];
+/* NAME OF OUTPUT DIRECTORY HERE */
+const outDir = 'output';
+/* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
+const fileExtensions = ['jpg', 'jpeg', 'png', 'svg', 'gif', 'webp'];
 const getFileExtension = (url: string) => {
-	let ext = '';
-	fileExtensions.forEach((extension) => {
+	for (const extension of fileExtensions) {
 		if (url.toLowerCase().includes(extension)) {
-			ext = extension;
-			return;
+			return extension;
 		}
+	}
+};
+
+const downloadImage = async (url: string, name: string) => {
+	const imagePath = Path.resolve(__dirname, outDir, `${name}.${getFileExtension(url)}`);
+	const writer = Fs.createWriteStream(imagePath);
+	console.log(getFileExtension(url), ' : ', url);
+	const res = await Axios.get(url, { method: 'GET', responseType: 'stream' });
+
+	res.data.pipe(writer);
+	return new Promise((resolve, reject) => {
+		writer.on('finish', resolve);
+		writer.on('error', reject);
 	});
-	return ext;
 };
 
 const getImages = async (url: string) => {
 	const browser = await playwright.chromium.launch({ headless: true });
 	const page = await browser.newPage();
 	await page.goto(url);
+	await page.waitForLoadState('domcontentloaded');
+	await page.evaluate(() =>
+		window.scrollBy({ behavior: 'smooth', top: document.body.scrollHeight })
+	);
+	await page.waitForLoadState('networkidle');
 	const images = await page.$$eval('img', (selected) => {
 		return selected.map((img) => ({ src: img.src, alt: img.alt }));
 	});
-	fs.mkdir(`${__dirname}/output`, () => {
+	Fs.mkdir(`${__dirname}/${outDir}`, () => {
 		images.forEach(async (img, index) => {
-			const path = Path.resolve(
-				__dirname,
-				'output',
-				`${img.alt || `img${index}`}.${getFileExtension(img.src)}`
-			);
-			const writer = fs.createWriteStream(path);
-			const res = await axios.get(img.src, { responseType: 'stream' });
-			res.data.pipe(writer);
+			try {
+				await downloadImage(img.src, img.alt || `img${index}`);
+			} catch (err) {}
 		});
 	});
 	await browser.close();
 };
 
-getImages('your url here'); // change the argument to the url you wnat to use
+getImages('https://yetirobotics.org/'); // change the argument to the url you wnat to use
+
+export {};
