@@ -1,10 +1,11 @@
 const playwright = require('playwright');
 const Fs = require('fs');
 const Path = require('path');
+const isValidFilename = require('./filename-validation');
 import Axios from 'axios';
 
 /* URL AND NAME OF OUTPUT DIRECTORY HERE */
-const targetUrl = 'https://yetirobotics.org/';
+const targetUrl = 'https://www.twitch.tv/';
 const outDir = 'output';
 /* ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ */
 
@@ -45,7 +46,7 @@ const getImages = async (url: string) => {
 	Fs.mkdir(`${__dirname}/${outDir}`, () => {
 		images.forEach(async (img, index) => {
 			try {
-				await downloadImage(img.src, img.alt || `img${index}`);
+				await downloadImage(img.src, isValidFilename(img.alt) ? img.alt : `img${index}`);
 			} catch (err) {}
 		});
 	});

@@ -12,6 +12,7 @@
 	"dependencies": {
 		"axios": "^0.24.0",
 		"playwright": "^1.16.3",
-		"ts-node": "^10.4.0"
+		"ts-node": "^10.4.0",
+		"valid-filename": "^4.0.0"
 	}
 }
